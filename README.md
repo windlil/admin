@@ -10,5 +10,4 @@
 - 可视化 Echart
 - css预编译 Less
 - 网络请求 Axios
-- 代码规范 eslint
-- 提交规范 commitlint
+- 规范 eslint commitlint husky
