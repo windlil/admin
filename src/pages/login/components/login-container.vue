@@ -2,17 +2,23 @@
 import { reactive, ref } from 'vue'
 import type { IForm } from '@/types/login'
 import { useLoginStore } from '@/store/login/index'
+import { getStorage } from '@/utils/useStorage'
+import { STORAGE_KEY } from '@/types/storage'
 
 const formRef = ref()
-const checked = ref(true)
 const dialogVisible = ref(false)
 const loginStore = useLoginStore()
 
+// 获取在先前登录状态是否保存密码
+const user = getStorage(STORAGE_KEY.USER)
+
 const form = reactive<IForm>({
-  username: '',
-  password: '',
+  username: user?.username ?? '',
+  password: user?.password ?? '',
+  checked: true,
 })
 
+// 表单验证规则
 const formRules = reactive({
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -24,6 +30,7 @@ const formRules = reactive({
   ],
 })
 
+// 处理弹出框关闭
 function handleClose() {
   dialogVisible.value = false
 }
@@ -62,7 +69,7 @@ function login(formEl: any) {
         <el-input v-model="form.password" show-password style="width: 240px;" />
       </el-form-item>
       <el-form-item class="checkbox-item">
-        <el-checkbox v-model="checked" label="记住密码" size="large" />
+        <el-checkbox v-model="form.checked" label="记住密码" size="large" />
         <el-link type="primary" :underline="false" @click="dialogVisible = true">
           忘记密码
         </el-link>

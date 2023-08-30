@@ -7,3 +7,15 @@ export function useLoginRequest<T>(account: IAccount) {
     data: account,
   })
 }
+
+export function useUserInfoRequest<T>(id: number) {
+  return useAxios.get<T>({
+    url: `/users/${id}`,
+  })
+}
+
+export function useUserMenuRequest<T>(id: number) {
+  return useAxios.get<T>({
+    url: `/role/${id}/menu`,
+  })
+}
