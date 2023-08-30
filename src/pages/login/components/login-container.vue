@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
+import type { IForm } from '@/types/login'
+import { useLoginStore } from '@/store/login/index'
 
 const formRef = ref()
 const checked = ref(true)
 const dialogVisible = ref(false)
+const loginStore = useLoginStore()
 
-const form = reactive({
+const form = reactive<IForm>({
   username: '',
   password: '',
 })
@@ -13,7 +16,7 @@ const form = reactive({
 const formRules = reactive({
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
-    { pattern: /^[0-9z-zA-Z]{6,20}$/, message: '必须是6~20位长度', trigger: 'change' },
+    { pattern: /^[0-9a-zA-Z]{6,20}$/, message: '必须是6~20位长度', trigger: 'change' },
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
@@ -28,9 +31,8 @@ function handleClose() {
 function login(formEl: any) {
   formEl.validate((valid: any) => {
     if (valid) {
-      console.log('submit!')
+      loginStore.fetchLogin(form)
     } else {
-      console.log('error submit!')
       return false
     }
   })

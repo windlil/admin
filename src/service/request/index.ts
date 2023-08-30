@@ -45,7 +45,7 @@ class Request {
     return this.request<T>({ ...config, method: 'GET' })
   }
 
-  POST<T>(config: RequestConfig<T>): Promise<T> {
+  post<T>(config: RequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'POST' })
   }
 
