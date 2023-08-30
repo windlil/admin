@@ -25,6 +25,7 @@ function getIconName(icon: string) {
       background-color="transparent"
       text-color="#dddddd"
       active-text-color="#fff"
+      router
       @open="handleOpen"
       @close="handleClose"
     >

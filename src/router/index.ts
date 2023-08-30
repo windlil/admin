@@ -11,11 +11,28 @@ const routes = [
     path: '/main',
     component: () => import('../pages/main/main.vue'),
     name: 'main',
+    children: [
+      {
+        path: 'analysis/dashboard',
+        component: () => import('../pages/analysis/dashboard/dashboard.vue'),
+        name: 'dashboard',
+      },
+      {
+        path: 'analysis/overview',
+        component: () => import('../pages/analysis/overview/overview.vue'),
+        name: 'overview',
+      },
+    ],
   },
   {
     path: '/login',
     component: () => import('../pages/login/login.vue'),
     name: 'login',
+  },
+  {
+    path: '/:pathMatch(.*)',
+    component: () => import('../pages/NotFound/not-found.vue'),
+    name: 'NotFound',
   },
 ]
 
