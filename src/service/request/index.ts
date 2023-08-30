@@ -42,19 +42,19 @@ class Request {
   }
 
   get<T>(config: RequestConfig<T>): Promise<T> {
-    return this.request({ ...config, method: 'GET' })
+    return this.request<T>({ ...config, method: 'GET' })
   }
 
   POST<T>(config: RequestConfig<T>): Promise<T> {
-    return this.request({ ...config, method: 'POST' })
+    return this.request<T>({ ...config, method: 'POST' })
   }
 
   delete<T>(config: RequestConfig<T>): Promise<T> {
-    return this.request({ ...config, method: 'DELETE' })
+    return this.request<T>({ ...config, method: 'DELETE' })
   }
 
   patch<T>(config: RequestConfig<T>): Promise<T> {
-    return this.request({ ...config, method: 'PATCH' })
+    return this.request<T>({ ...config, method: 'PATCH' })
   }
 }
 
