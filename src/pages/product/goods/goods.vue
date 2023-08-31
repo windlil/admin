@@ -4,7 +4,7 @@
 
 <template>
   <div>
-    role
+    goods
   </div>
 </template>
 

@@ -2,6 +2,10 @@ import axios from 'axios'
 import type { AxiosInstance } from 'axios'
 import type { RequestConfig, RequstInterceptors } from './type'
 
+/*
+  使用ts对axios进行了二次封装，使其有更良好的类型提示，可以灵活的增加实例或全局拦截器。
+*/
+
 class Request {
   instance: AxiosInstance
   interceptors: RequstInterceptors

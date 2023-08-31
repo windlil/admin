@@ -2,6 +2,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useLocalStorage } from '@vueuse/core'
 import { STORAGE_KEY } from '@/types/storage'
 
+/*
+  动态路由
+  基于向后端接口请求返回的菜单信息，根据菜单信息来匹配正确的路由，
+  然后通过router.add()方法来动态的创建路由。
+*/
+
 const routes = [
   {
     path: '/',
@@ -11,18 +17,6 @@ const routes = [
     path: '/main',
     component: () => import('../pages/main/main.vue'),
     name: 'main',
-    children: [
-      {
-        path: 'analysis/dashboard',
-        component: () => import('../pages/analysis/dashboard/dashboard.vue'),
-        name: 'dashboard',
-      },
-      {
-        path: 'analysis/overview',
-        component: () => import('../pages/analysis/overview/overview.vue'),
-        name: 'overview',
-      },
-    ],
   },
   {
     path: '/login',

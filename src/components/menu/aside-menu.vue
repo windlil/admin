@@ -1,61 +1,51 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useLoginStore } from '@/store/login'
 
+const router = useRouter()
+const route = useRoute()
 const loginStore = useLoginStore()
 const { usermenu } = storeToRefs(loginStore)
-
-function handleOpen(key: string, keyPath: string[]) {
-  console.log(key, keyPath)
-}
-function handleClose(key: string, keyPath: string[]) {
-  console.log(key, keyPath)
-}
 
 function getIconName(icon: string) {
   return icon.split('-')[2]
 }
+
+function to(url: any) {
+  router.push(url)
+}
+
+const defaultActive = computed(() => {
+  return route.path
+})
 </script>
 
 <template>
   <div>
     <el-menu
-      default-active="2"
+      :default-active="defaultActive"
       class="el-menu-vertical-demo"
       background-color="transparent"
       text-color="#dddddd"
       active-text-color="#fff"
-      router
-      @open="handleOpen"
-      @close="handleClose"
     >
       <template v-for="item in usermenu" :key="item.id">
-        <el-sub-menu :index="item.url">
+        <el-sub-menu :index="String(item.id)">
           <template #title>
             <el-icon>
-              <component :is="getIconName(item.icon)" />
+              <component :is="getIconName(item.url)" />
             </el-icon>
             <span>{{ item.name }}</span>
           </template>
           <template v-for="children_item in item.children" :key="children_item.id">
-            <el-menu-item :index="children_item.url">
+            <el-menu-item :index="String(children_item.url)" @click="to(children_item.url)">
               {{ children_item.name }}
             </el-menu-item>
           </template>
         </el-sub-menu>
       </template>
-      <el-sub-menu index="2">
-        <template #title>
-          <el-icon><location /></el-icon>
-          <span>系统管理</span>
-        </template>
-        <el-menu-item index="2-1">
-          用户管理
-        </el-menu-item>
-        <el-menu-item index="2-2">
-          部门管理
-        </el-menu-item>
-      </el-sub-menu>
     </el-menu>
   </div>
 </template>
@@ -68,5 +58,9 @@ function getIconName(icon: string) {
 
 :deep(.el-menu--inline) {
   background-color: #3e4246 !important;
+}
+
+:deep(.el-menu) {
+  margin: -1px !important;
 }
 </style>

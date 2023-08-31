@@ -1,5 +1,16 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
+import { delStorage } from '@/utils/useStorage'
+import { STORAGE_KEY } from '@/types/storage'
 
+const router = useRouter()
+
+function exit() {
+  delStorage(STORAGE_KEY.ACCOUNT)
+  delStorage(STORAGE_KEY.USERINFO)
+  delStorage(STORAGE_KEY.USERMENU)
+  router.push('/login')
+}
 </script>
 
 <template>
@@ -39,7 +50,7 @@
               </el-dropdown-item>
               <el-dropdown-item>
                 <el-icon><SwitchButton /></el-icon>
-                <span>退出登录</span>
+                <span @click="exit">退出登录</span>
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>

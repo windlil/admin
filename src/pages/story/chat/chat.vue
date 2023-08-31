@@ -4,7 +4,7 @@
 
 <template>
   <div>
-    role
+    chat
   </div>
 </template>
 
