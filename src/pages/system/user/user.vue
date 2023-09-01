@@ -1,17 +1,24 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { storeToRefs } from 'pinia'
+import { ElMessage } from 'element-plus'
 import type { Item } from './components/search-col.vue'
 import SearchCol from './components/search-col.vue'
+import Dialog from './components/dialog.vue'
 import Card from '@/components/card/card.vue'
 import useSystemStorage from '@/store/system'
 import { formatDate } from '@/utils/formatDate'
+import 'element-plus/theme-chalk/el-message.css'
+import useMainStore from '@/store/main/main'
 
 const systemStore = useSystemStorage()
 const formRef = ref()
 const { userlist, totalCount } = storeToRefs(systemStore)
 const currentPage = ref(1)
 const pageSize = ref(5)
+const dialogRef = ref<InstanceType<typeof Dialog>>()
+const mainStore = useMainStore()
+const { departmentList, roleList } = storeToRefs(mainStore)
 
 const data = reactive<Item[]>([
   {
@@ -45,13 +52,24 @@ const data = reactive<Item[]>([
   },
 ])
 
-function clickBtn(e: MouseEvent) {
-  console.log(e)
+function clickBtn() {
+  if (dialogRef.value) {
+    dialogRef.value.openDialog()
+  }
 }
 
 function btnEnable(enable: number): string {
-  console.log(enable)
   return enable ? 'success' : 'danger'
+}
+
+function fetchUsersList(form?: any) {
+  const size = pageSize.value
+  const offset = currentPage.value - 1
+  systemStore.getUsersList({
+    offset,
+    size,
+    ...form,
+  })
 }
 
 function handleSizeChange() {
@@ -62,22 +80,51 @@ function handleCurrentChange() {
   fetchUsersList()
 }
 
-function fetchUsersList() {
-  const size = pageSize.value
-  const offset = currentPage.value - 1
-  systemStore.getUsersList({
-    offset,
-    size,
+function search(form: any) {
+  fetchUsersList(form)
+}
+
+function reset() {
+  fetchUsersList()
+}
+
+function deleteUserById(id: number) {
+  systemStore.deleteUser(id).then(() => {
+    ElMessage({
+      type: 'success',
+      message: '删除用户成功',
+    })
+    reset()
+  }).catch(() => {
+    ElMessage({
+      type: 'error',
+      message: '删除用户失败',
+    })
   })
 }
 
+function updateList(result: 'success' | 'error') {
+  reset()
+  ElMessage({
+    type: result,
+    message: result === 'success' ? '操作成功' : '操作失败',
+  })
+}
+
+function editUsersById(form: number) {
+  dialogRef.value?.openDialog(form)
+}
+
 fetchUsersList()
+
+mainStore.getDepartmentList()
+mainStore.getRoleList()
 </script>
 
 <template>
   <div class="user">
     <el-card class="box-card">
-      <SearchCol :item-data="data" :form-ref="formRef" />
+      <SearchCol :item-data="data" :form-ref="formRef" @on-search="search" @on-reset-emit="reset" />
     </el-card>
     <Card title="用户列表" btn-name="新建用户" style="margin-top: 30px;" @on-click="clickBtn">
       <template v-if="userlist">
@@ -104,14 +151,16 @@ fetchUsersList()
             </template>
           </el-table-column>
           <el-table-column label="操作" width="120" align="center">
-            <div class="btn-group">
-              <el-button type="primary" size="small" plain>
-                编辑
-              </el-button>
-              <el-button type="danger" size="small" plain>
-                删除
-              </el-button>
-            </div>
+            <template #default="scope">
+              <div class="btn-group">
+                <el-button type="primary" size="small" plain @click="editUsersById(scope.row)">
+                  编辑
+                </el-button>
+                <el-button type="danger" size="small" plain @click="deleteUserById(scope.row.id)">
+                  删除
+                </el-button>
+              </div>
+            </template>
           </el-table-column>
         </el-table>
         <div class="pagination">
@@ -128,6 +177,7 @@ fetchUsersList()
       </template>
     </Card>
   </div>
+  <Dialog ref="dialogRef" :department-list="departmentList" :role-list="roleList" @update-list="updateList" />
 </template>
 
 <style scoped lang="less">

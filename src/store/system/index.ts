@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { useUsersListRequest } from '@/service/modules/system'
+import { useDeleteUserRequest, useEditUserRequest, useUserRequest, useUsersListRequest } from '@/service/modules/system'
 import type { IState, userListResponse } from '@/types/system'
 
 const useSystemStore = defineStore('systemStore', {
@@ -15,7 +15,41 @@ const useSystemStore = defineStore('systemStore', {
       const { list, totalCount } = data.data
       this.userlist = list
       this.totalCount = totalCount
-      console.log(this.userlist)
+    },
+
+    async deleteUser(id: number) {
+      const data = await useDeleteUserRequest<any>(id)
+      console.log(data)
+      return new Promise((resolve, reject) => {
+        if (data.code === 0) {
+          resolve(true)
+        } else {
+          reject(new Error(data.data))
+        }
+      })
+    },
+
+    async addUser(userinfo: any) {
+      const data = await useUserRequest<any>(userinfo)
+      console.log(data)
+      return new Promise((resolve, reject) => {
+        if (data.code === 0) {
+          resolve(true)
+        } else {
+          reject(new Error(data.data))
+        }
+      })
+    },
+
+    async editUser(id: number, userinfo: any) {
+      const data = await useEditUserRequest<any>(id, userinfo)
+      return new Promise((resolve, reject) => {
+        if (data.code === 0) {
+          resolve(true)
+        } else {
+          reject(new Error(data.data))
+        }
+      })
     },
   },
 })

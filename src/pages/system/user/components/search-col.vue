@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 import { Refresh, Search } from '@element-plus/icons-vue'
-import type { ElForm } from 'element-plus'
 
 export interface Item {
   name: string
@@ -15,24 +14,30 @@ defineProps<{
   formRef: any
 }>()
 
-const formRef = ref<InstanceType<typeof ElForm>>()
+const emits = defineEmits(['onSearch', 'onResetEmit'])
 
 const form = reactive({
   name: '',
   realname: '',
   cellphone: '',
-  enable: 1,
-  createAt: [],
+  enable: '',
+  createAt: '',
 })
 
 function resetFormValue() {
-  formRef.value?.resetFields()
+  for (const item in form) {
+    (form as any)[item] = ''
+  }
+  emits('onResetEmit')
+}
+function search() {
+  emits('onSearch', form)
 }
 </script>
 
 <template>
   <el-form>
-    <el-row ref="formRef" :gutter="24">
+    <el-row :gutter="24">
       <template v-for="item in itemData" :key="item.label">
         <el-col :span="8">
           <!-- input -->
@@ -70,7 +75,7 @@ function resetFormValue() {
     <el-button plain :icon="Refresh" @click="resetFormValue">
       重置
     </el-button>
-    <el-button type="primary" plain :icon="Search">
+    <el-button type="primary" plain :icon="Search" @click="search">
       查询
     </el-button>
   </div>

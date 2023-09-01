@@ -35,7 +35,7 @@ const defaultActive = computed(() => {
         <el-sub-menu :index="String(item.id)">
           <template #title>
             <el-icon>
-              <component :is="getIconName(item.url)" />
+              <component :is="getIconName(item.icon)" />
             </el-icon>
             <span>{{ item.name }}</span>
           </template>
