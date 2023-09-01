@@ -23,10 +23,10 @@ export const useLoginStore = defineStore('loginStore', {
         name: form.username,
         password: form.password,
       })
-      if (res.data.data.token) {
-        this.id = res.data.data.id
-        this.name = res.data.data.name
-        this.token = res.data.data.token
+      if (res.data.token) {
+        this.id = res.data.id
+        this.name = res.data.name
+        this.token = res.data.token
         setStorage(STORAGE_KEY.ACCOUNT, {
           token: this.token,
           name: this.name,
@@ -42,6 +42,9 @@ export const useLoginStore = defineStore('loginStore', {
 
         // 匹配动态路由
         const firstMenuPath = mapRouter(this.usermenu, localRoutes)
+
+        setStorage(STORAGE_KEY.FIRST_MENU, firstMenuPath)
+
         router.push(firstMenuPath)
       }
     },

@@ -9,6 +9,7 @@ function exit() {
   delStorage(STORAGE_KEY.ACCOUNT)
   delStorage(STORAGE_KEY.USERINFO)
   delStorage(STORAGE_KEY.USERMENU)
+  delStorage(STORAGE_KEY.FIRST_MENU)
   router.push('/login')
 }
 </script>

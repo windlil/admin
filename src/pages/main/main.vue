@@ -3,7 +3,7 @@ import DefaultLayout from '@/components/layout/default-layout.vue'
 </script>
 
 <template>
-  <div>
+  <div class="main">
     <DefaultLayout>
       <router-view />
     </DefaultLayout>
@@ -11,5 +11,8 @@ import DefaultLayout from '@/components/layout/default-layout.vue'
 </template>
 
 <style scoped lang="less">
-
+.main {
+  width: 100%;
+  height: 100%;
+}
 </style>

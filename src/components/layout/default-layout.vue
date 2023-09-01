@@ -22,11 +22,14 @@ import MyHeader from './my-header.vue'
 
 <style scoped lang="less">
 .container {
+  width: 100%;
+  height: 100%;
   user-select: none !important;
 }
 
 :deep(.el-aside) {
-  height: 100vh !important;
+  height: 100% !important;
   background-color: #222222;
+  overflow: hidden;
 }
 </style>

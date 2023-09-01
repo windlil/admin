@@ -37,8 +37,12 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const account = useLocalStorage(STORAGE_KEY.ACCOUNT, null)
+  const firstMenu = useLocalStorage(STORAGE_KEY.FIRST_MENU, '/')
+  console.log(firstMenu.value)
   if (!account.value && to.path === '/main') {
     return '/login'
+  } else if (to.path === '/main') {
+    return JSON.parse(firstMenu.value)
   }
 })
 

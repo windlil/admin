@@ -20,14 +20,14 @@ export function setRememberPassword(form: IForm) {
 
 export async function getUserInfo(id: number) {
   const userinfo = await useUserInfoRequest<any>(id)
-  const info = userinfo.data.data ?? null
+  const info = userinfo.data ?? null
   setStorage(STORAGE_KEY.USERINFO, info)
   return info
 }
 
 export async function getUserMenu(id: number) {
   const usermenu = await useUserMenuRequest<any>(id)
-  const menu = usermenu.data.data ?? null
+  const menu = usermenu.data ?? null
   setStorage(STORAGE_KEY.USERMENU, menu)
   return menu
 }

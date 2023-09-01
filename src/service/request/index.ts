@@ -38,7 +38,7 @@ class Request {
         if (config.interceptors?.responseInterceptor)
           res = config.interceptors.responseInterceptor(res)
 
-        resolve(res)
+        resolve(res.data)
       }).catch((err) => {
         return reject(err)
       })
