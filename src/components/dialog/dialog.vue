@@ -116,7 +116,3 @@ defineExpose({
     </template>
   </el-dialog>
 </template>
-
-<style scoped lang="less">
-
-</style>

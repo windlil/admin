@@ -9,20 +9,22 @@ export interface Item {
   placeholder?: string
 }
 
-defineProps<{
+const props = defineProps<{
   itemData: Item[]
-  formRef: any
 }>()
 
 const emits = defineEmits(['onSearch', 'onResetEmit'])
 
-const form = reactive({
-  name: '',
-  realname: '',
-  cellphone: '',
-  enable: '',
-  createAt: '',
-})
+const form = reactive({})
+
+function mapForm() {
+  console.log(props.itemData)
+  for (const item of props.itemData) {
+    (form as any)[item.name] = ''
+  }
+}
+
+mapForm()
 
 function resetFormValue() {
   for (const item in form) {
@@ -49,7 +51,7 @@ function search() {
           <!-- select -->
           <template v-if="item.type === 'select'">
             <el-form-item :label="item.label">
-              <el-select v-model="form.enable" :placeholder="item.placeholder" style="width: 100%;">
+              <el-select v-model="(form as any)[item.name]" :placeholder="item.placeholder" style="width: 100%;">
                 <el-option label="禁用" :value="0" />
                 <el-option label="启用" :value="1" />
               </el-select>
@@ -59,7 +61,7 @@ function search() {
           <template v-if="item.type === 'datepicker'">
             <el-form-item :label="item.label">
               <el-date-picker
-                v-model="form.createAt"
+                v-model="(form as any)[item.name]"
                 type="daterange"
                 range-separator="-"
                 start-placeholder="开始时间"
