@@ -29,24 +29,24 @@ export const localRoutes = [
     component: () => import('../../pages/system/menu/menu.vue'),
     name: 'menu',
   },
-  {
-    path: 'product/category',
-    component: () => import('../../pages/product/category/category.vue'),
-    name: 'category',
-  },
-  {
-    path: 'product/goods',
-    component: () => import('../../pages/product/goods/goods.vue'),
-    name: 'goods',
-  },
-  {
-    path: 'story/chat',
-    component: () => import('../../pages/story/chat/chat.vue'),
-    name: 'chat',
-  },
-  {
-    path: 'story/list',
-    component: () => import('../../pages/story/list/list.vue'),
-    name: 'list',
-  },
+  // {
+  //   path: 'product/category',
+  //   component: () => import('../../pages/product/category/category.vue'),
+  //   name: 'category',
+  // },
+  // {
+  //   path: 'product/goods',
+  //   component: () => import('../../pages/product/goods/goods.vue'),
+  //   name: 'goods',
+  // },
+  // {
+  //   path: 'story/chat',
+  //   component: () => import('../../pages/story/chat/chat.vue'),
+  //   name: 'chat',
+  // },
+  // {
+  //   path: 'story/list',
+  //   component: () => import('../../pages/story/list/list.vue'),
+  //   name: 'list',
+  // },
 ]

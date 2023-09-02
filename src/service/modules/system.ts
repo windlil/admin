@@ -45,3 +45,36 @@ export function useEditUserRequest<T>(id: number, data: any) {
     data,
   })
 }
+
+export function usePageTableList<T>(type: string, queryInfo?: any) {
+  return useAxios.post<T>({
+    url: `/${type}/list`,
+    data: queryInfo,
+  })
+}
+
+export function useDeletePageRequest<T>(type: string, id: number) {
+  return useAxios.delete<T>({
+    url: `/${type}/${id}`,
+  })
+}
+
+export function useNewPageData<T>(type: string, data: any) {
+  return useAxios.post<T>({
+    url: `/${type}`,
+    data,
+  })
+}
+
+export function UseeditPageData<T>(type: string, id: number, data: any) {
+  return useAxios.patch<T>({
+    url: `${type}/${id}`,
+    data,
+  })
+}
+
+export function useEntireMenuList<T>() {
+  return useAxios.post<T>({
+    url: '/menu/list',
+  })
+}

@@ -21,4 +21,6 @@ export interface UserList {
 export interface IState {
   userlist: UserList | null
   totalCount: number
+  pageList: any
+  pageTotalCount: number
 }

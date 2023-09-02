@@ -27,7 +27,10 @@ export async function getUserInfo(id: number) {
 
 export async function getUserMenu(id: number) {
   const usermenu = await useUserMenuRequest<any>(id)
-  const menu = usermenu.data ?? null
+  let menu = usermenu.data ?? null
+  menu = menu.filter((value: any) => {
+    return !value.url.includes('product') && !value.url.includes('story')
+  })
   setStorage(STORAGE_KEY.USERMENU, menu)
   return menu
 }

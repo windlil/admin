@@ -1,7 +1,16 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import SearchCol from '@/components/search-col/search-col.vue'
+import depdialog from '@/components/dialog/dep-dialog.vue'
 import type { Item } from '@/components/search-col/search-col.vue'
+import useMainStore from '@/store/main/main'
+import { useTableHook } from '@/hooks/tableHook'
+
+const dialogRef = ref<InstanceType<typeof depdialog>>()
+const mainStore = useMainStore()
+mainStore.getDepartmentList()
+const { departmentList } = storeToRefs(mainStore)
 
 const data = reactive<Item[]>([
   {
@@ -22,16 +31,40 @@ const data = reactive<Item[]>([
     label: '创建时间',
   },
 ])
+
+const typeList = reactive([
+  {
+    prop: 'name',
+    label: '部门名称',
+  },
+  {
+    prop: 'leader',
+    label: '部门领导',
+  },
+  {
+    prop: 'parentId',
+    label: '上级部门',
+  },
+])
+
+const { search, reset, newData, del, edit, handleChange, updateList, pageList, pageTotalCount } = useTableHook('department', dialogRef)
 </script>
 
 <template>
   <div class="department">
     <el-card class="box-card">
-      <SearchCol :item-data="data" />
+      <SearchCol :item-data="data" @on-search="search" @on-reset-emit="reset" />
     </el-card>
+    <Card v-if="pageList" title="部门列表" btn-name="新建部门" style="margin-top: 30px;" @on-click="newData">
+      <MyTable
+        :type-list="typeList"
+        :userlist="pageList"
+        :total-count="pageTotalCount"
+        @change-emit="handleChange"
+        @del="del"
+        @edit="edit"
+      />
+    </Card>
   </div>
+  <DepDialog ref="dialogRef" :department-list="departmentList" @update-list="updateList" />
 </template>
-
-<style scoped lang="less">
-
-</style>

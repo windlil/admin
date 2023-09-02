@@ -52,6 +52,26 @@ const data = reactive<Item[]>([
   },
 ])
 
+const typeList = reactive([
+  {
+    prop: 'name',
+    label: '姓名',
+  },
+  {
+    prop: 'realname',
+    label: '真实姓名',
+  },
+  {
+    prop: 'cellphone',
+    label: '联系号码',
+    width: '160',
+  },
+  {
+    prop: 'enable',
+    label: '状态',
+  },
+])
+
 function clickBtn() {
   if (dialogRef.value) {
     dialogRef.value.openDialog()
@@ -62,17 +82,17 @@ function fetchUsersList(form?: any) {
   const size = pageSize.value
   const offset = currentPage.value - 1
   systemStore.getUsersList({
-    offset,
-    size,
-    ...form,
+    offset: form?.currentPage ?? offset,
+    size: form?.pageSize ?? size,
   })
 }
 
-function handleChange() {
-  fetchUsersList()
+function handleChange(form: any) {
+  fetchUsersList(form)
 }
 
 function search(form: any) {
+  console.log(form)
   fetchUsersList(form)
 }
 
@@ -120,6 +140,7 @@ mainStore.getRoleList()
     </el-card>
     <Card title="用户列表" btn-name="新建用户" style="margin-top: 30px;" @on-click="clickBtn">
       <MyTable
+        :type-list="typeList"
         :userlist="userlist"
         :total-count="totalCount"
         @edit="editUsersById"

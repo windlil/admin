@@ -2,9 +2,18 @@
 import { ref } from 'vue'
 import { formatDate } from '@/utils/formatDate'
 
+interface TypeItem {
+  prop: string
+  label: string
+  width?: string
+}
+
 defineProps<{
   userlist: any
-  totalCount: number
+  totalCount?: number
+  typeList: TypeItem[]
+  noPag?: boolean
+  noControl?: boolean
 }>()
 
 const emits = defineEmits(['edit', 'del', 'changeEmit'])
@@ -25,23 +34,27 @@ function del(id: number) {
 }
 
 function handleChange() {
-  emits('changeEmit', handleChange, pageSize)
+  console.log('????????')
+  emits('changeEmit', {
+    currentPage: currentPage.value - 1,
+    pageSize: pageSize.value,
+  })
 }
 </script>
 
 <template v-if="userlist">
   <el-table :data="userlist" style="width: 100%">
     <el-table-column type="index" label="序号" width="120" align="center" />
-    <el-table-column prop="name" label="姓名" width="120" align="center" />
-    <el-table-column prop="realname" label="真实姓名" width="120" align="center" />
-    <el-table-column prop="cellphone" label="手机号码" width="160" align="center" />
-    <el-table-column prop="enable" label="状态" width="120" align="center">
-      <template #default="scope">
-        <el-button link :type="btnEnable(scope.row.enable)">
-          {{ scope.row.enable ? '启用' : '禁用' }}
-        </el-button>
-      </template>
-    </el-table-column>
+    <template v-for="item in typeList" :key="item.prop">
+      <el-table-column :prop="item.prop" :label="item.label" :width="item.width ?? ''" align="center" />
+      <el-table-column v-if="item.prop === 'enable'" prop="enable" label="状态" width="120" align="center">
+        <template #default="scope">
+          <el-button link :type="btnEnable(scope.row.enable)">
+            {{ scope.row.enable ? '启用' : '禁用' }}
+          </el-button>
+        </template>
+      </el-table-column>
+    </template>
     <el-table-column prop="createAt" label="创建时间" width="220" align="center">
       <template #default="scope">
         {{ formatDate(scope.row.createAt) }}
@@ -52,7 +65,7 @@ function handleChange() {
         {{ formatDate(scope.row.createAt) }}
       </template>
     </el-table-column>
-    <el-table-column label="操作" width="120" align="center">
+    <el-table-column v-if="!noControl" label="操作" width="120" align="center">
       <template #default="scope">
         <div class="btn-group">
           <el-button type="primary" size="small" plain @click="edit(scope.row)">
@@ -67,6 +80,7 @@ function handleChange() {
   </el-table>
   <div class="pagination">
     <el-pagination
+      v-if="!noPag"
       v-model:current-page="currentPage"
       v-model:page-size="pageSize"
       :page-sizes="[5, 10, 50, 100]"
