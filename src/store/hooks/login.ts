@@ -68,3 +68,19 @@ export function mapRouter(menu: any, routes: any) {
   }
   return `/main/${firstMenu}`
 }
+
+export function mapMenuToPermission(menulist: any) {
+  const permission: any[] = []
+  function getPermission(menu: any) {
+    for (const item of menu) {
+      if (item.type === 3) {
+        permission.push(item.permission)
+      } else {
+        getPermission(item?.children ?? [])
+      }
+    }
+  }
+  getPermission(menulist)
+
+  return permission
+}

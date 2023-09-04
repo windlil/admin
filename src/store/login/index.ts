@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getUserInfo, getUserMenu, mapRouter, setRememberPassword } from '../hooks/login'
+import { getUserInfo, getUserMenu, mapRouter, mapMenuToPermission, setRememberPassword } from '../hooks/login'
 import { localRoutes } from '@/router/main/localRoutes'
 import { useLoginRequest } from '@/service/modules/login'
 import { IForm, ILoginState } from '@/types/login'
@@ -14,6 +14,7 @@ export const useLoginStore = defineStore('loginStore', {
     id: '',
     userinfo: '',
     usermenu: '',
+    permission: '',
   }),
   actions: {
 
@@ -40,6 +41,9 @@ export const useLoginStore = defineStore('loginStore', {
 
         this.usermenu = await getUserMenu(Number(this.id)) ?? []
 
+        this.permission = mapMenuToPermission(this.usermenu)
+
+        setStorage(STORAGE_KEY.PERMISSION, this.permission)
         // 匹配动态路由
         const firstMenuPath = mapRouter(this.usermenu, localRoutes)
 
@@ -55,6 +59,7 @@ export const useLoginStore = defineStore('loginStore', {
       const id = getStorage(STORAGE_KEY.ACCOUNT)?.id
       const userinfo = getStorage(STORAGE_KEY.USERINFO)
       const usermenu = getStorage(STORAGE_KEY.USERMENU)
+      const permission = getStorage(STORAGE_KEY.PERMISSION)
 
       if (token && name && id && userinfo && usermenu) {
         this.token = token
@@ -62,6 +67,7 @@ export const useLoginStore = defineStore('loginStore', {
         this.id = id
         this.userinfo = userinfo
         this.usermenu = usermenu
+        this.permission = permission
         mapRouter(this.usermenu, localRoutes)
       }
     },

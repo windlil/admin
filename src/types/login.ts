@@ -15,4 +15,5 @@ export interface ILoginState {
   name: string
   userinfo: any
   usermenu: any
+  permission: any
 }

@@ -4,4 +4,5 @@ export const STORAGE_KEY = {
   USERINFO: 'cms-userinfo',
   USERMENU: 'cms-usermenu',
   FIRST_MENU: 'cms-firstmenu',
+  PERMISSION: 'cms-permission',
 }
