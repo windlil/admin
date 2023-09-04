@@ -43,7 +43,12 @@ const typeList = reactive([
   },
 ])
 
-const { search, reset, newData, del, edit, handleChange, updateList, pageList, pageTotalCount } = useTableHook('role', dialogRef)
+const config = {
+  name: 'role',
+  btnText: '新建角色',
+}
+
+const { search, reset, newData, del, edit, handleChange, updateList, isCreate, pageList, pageTotalCount } = useTableHook('role', dialogRef, config)
 </script>
 
 <template>
@@ -51,8 +56,9 @@ const { search, reset, newData, del, edit, handleChange, updateList, pageList, p
     <el-card class="box-card">
       <SearchCol :item-data="data" @on-search="search" @on-reset-emit="reset" />
     </el-card>
-    <Card v-if="pageList" title="角色列表" btn-name="新建角色" style="margin-top: 30px;" @on-click="newData">
+    <Card v-if="pageList" title="角色列表" :btn-name="isCreate" style="margin-top: 30px;" @on-click="newData">
       <MyTable
+        table-name="role"
         :type-list="typeList"
         :userlist="pageList"
         :total-count="pageTotalCount"

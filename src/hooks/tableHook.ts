@@ -1,12 +1,21 @@
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import useSystemStore from '@/store/system'
+import { useLoginStore } from '@/store/login'
 
-export function useTableHook(type: string, dialogRef: any) {
+interface CreateConfig {
+  name: string
+  btnText: string
+}
+
+export function useTableHook(type: string, dialogRef: any, createConfig: CreateConfig) {
   const systemStore = useSystemStore()
+  const loginStore = useLoginStore()
+  const { permission } = storeToRefs(loginStore)
   const { pageList, pageTotalCount } = storeToRefs(systemStore)
   const currentPage = ref(1)
   const pageSize = ref(5)
+  const isCreate = permission.value.includes(`system:${createConfig.name}:create`) ? createConfig.btnText : ''
 
   function fetchPageList(form?: any, config?: any) {
     const size = pageSize.value
@@ -58,6 +67,7 @@ export function useTableHook(type: string, dialogRef: any) {
     updateList,
     newData,
     reset,
+    isCreate,
     pageList,
     pageTotalCount,
   }

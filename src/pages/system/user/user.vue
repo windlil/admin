@@ -10,6 +10,7 @@ import Card from '@/components/card/card.vue'
 import useSystemStorage from '@/store/system'
 import 'element-plus/theme-chalk/el-message.css'
 import useMainStore from '@/store/main/main'
+import { useLoginStore } from '@/store/login'
 
 const systemStore = useSystemStorage()
 const formRef = ref()
@@ -19,6 +20,10 @@ const pageSize = ref(5)
 const dialogRef = ref<InstanceType<typeof Dialog>>()
 const mainStore = useMainStore()
 const { departmentList, roleList } = storeToRefs(mainStore)
+const loginStore = useLoginStore()
+const { permission } = storeToRefs(loginStore)
+
+const isAdd = permission.value.includes('system:users:create') ? '新建用户' : ''
 
 const data = reactive<Item[]>([
   {
@@ -138,8 +143,9 @@ mainStore.getRoleList()
     <el-card class="box-card">
       <SearchCol :item-data="data" :form-ref="formRef" @on-search="search" @on-reset-emit="reset" />
     </el-card>
-    <Card title="用户列表" btn-name="新建用户" style="margin-top: 30px;" @on-click="clickBtn">
+    <Card title="用户列表" :btn-name="isAdd" style="margin-top: 30px;" @on-click="clickBtn">
       <MyTable
+        table-name="users"
         :type-list="typeList"
         :userlist="userlist"
         :total-count="totalCount"

@@ -47,7 +47,12 @@ const typeList = reactive([
   },
 ])
 
-const { search, reset, newData, del, edit, handleChange, updateList, pageList, pageTotalCount } = useTableHook('department', dialogRef)
+const config = {
+  name: 'department',
+  btnText: '新建部门',
+}
+
+const { search, reset, newData, del, edit, handleChange, isCreate, updateList, pageList, pageTotalCount } = useTableHook('department', dialogRef, config)
 </script>
 
 <template>
@@ -55,8 +60,9 @@ const { search, reset, newData, del, edit, handleChange, updateList, pageList, p
     <el-card class="box-card">
       <SearchCol :item-data="data" @on-search="search" @on-reset-emit="reset" />
     </el-card>
-    <Card v-if="pageList" title="部门列表" btn-name="新建部门" style="margin-top: 30px;" @on-click="newData">
+    <Card v-if="pageList" title="部门列表" :btn-name="isCreate" style="margin-top: 30px;" @on-click="newData">
       <MyTable
+        table-name="department"
         :type-list="typeList"
         :userlist="pageList"
         :total-count="pageTotalCount"

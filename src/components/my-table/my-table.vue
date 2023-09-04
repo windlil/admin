@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import { formatDate } from '@/utils/formatDate'
+import { useLoginStore } from '@/store/login'
 
 interface TypeItem {
   prop: string
@@ -8,7 +10,8 @@ interface TypeItem {
   width?: string
 }
 
-defineProps<{
+const props = defineProps<{
+  tableName: string
   userlist: any
   totalCount?: number
   typeList: TypeItem[]
@@ -17,6 +20,14 @@ defineProps<{
 }>()
 
 const emits = defineEmits(['edit', 'del', 'changeEmit'])
+
+const store = useLoginStore()
+const { permission } = storeToRefs(store)
+
+console.log(permission.value)
+
+const isEdit = (permission.value as any).includes(`system:${props.tableName}:update`)
+const isDel = (permission.value as any).includes(`system:${props.tableName}:delete`)
 
 const currentPage = ref(1)
 const pageSize = ref(5)
@@ -34,7 +45,6 @@ function del(id: number) {
 }
 
 function handleChange() {
-  console.log('????????')
   emits('changeEmit', {
     currentPage: currentPage.value - 1,
     pageSize: pageSize.value,
@@ -68,10 +78,10 @@ function handleChange() {
     <el-table-column v-if="!noControl" label="操作" width="120" align="center">
       <template #default="scope">
         <div class="btn-group">
-          <el-button type="primary" size="small" plain @click="edit(scope.row)">
+          <el-button v-if="isEdit" type="primary" size="small" plain @click="edit(scope.row)">
             编辑
           </el-button>
-          <el-button type="danger" size="small" plain @click="del(scope.row.id)">
+          <el-button v-if="isDel" type="danger" size="small" plain @click="del(scope.row.id)">
             删除
           </el-button>
         </div>

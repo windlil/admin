@@ -14,7 +14,7 @@ export const useLoginStore = defineStore('loginStore', {
     id: '',
     userinfo: '',
     usermenu: '',
-    permission: '',
+    permission: [],
   }),
   actions: {
 

@@ -25,14 +25,19 @@ const typeList = reactive([
   },
 ])
 
-const { newData, del, edit, handleChange, updateList, pageList } = useTableHook('menu', dialogRef)
-console.log(pageList)
+const config = {
+  name: '',
+  btnText: '新建菜单',
+}
+
+const { newData, del, edit, handleChange, updateList, pageList } = useTableHook('menu', dialogRef, config)
 </script>
 
 <template>
   <div class="menu">
     <Card v-if="pageList" title="菜单列表" style="margin-top: 30px;" @on-click="newData">
       <MyTable
+        table-name="menu"
         :no-pag="true"
         :no-control="true"
         :type-list="typeList"
