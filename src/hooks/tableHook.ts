@@ -28,6 +28,8 @@ export function useTableHook(type: string, dialogRef: any, createConfig: CreateC
     })
   }
 
+  //
+
   function search(form: any) {
     fetchPageList(form)
   }
